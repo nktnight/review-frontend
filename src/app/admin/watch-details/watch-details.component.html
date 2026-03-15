@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Sarabun:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการที่บันทึกไว้</title>
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+        <header>
+            <button class="back-btn" onclick="history.back()">กลับ</button>
+            <div class="logo">RevMSU</div>
+        </header>
+
+        <main>
+            <h2 class="page-title">โพสต์ทั้งหมดที่ถูกปิดการมองเห็น</h2>
+
+            <div class="tab-container">
+                <div class="tab-item" [class.active]="currentTab === 'review'" (click)="setTab('review')">
+                    โพสต์รีวิวรายวิชา
+                </div>
+                <div class="tab-item" [class.active]="currentTab === 'qa'" (click)="setTab('qa')">
+                    โพสต์ถามตอบ
+                </div>
+            </div>
+
+           <div class="list-container">
+
+                <ng-container *ngIf="currentTab === 'review'">
+                    
+                    <div class="post-card" *ngFor="let item of reviewsList">
+                        <div class="pc-header">
+                            <div class="pc-user-info">
+                                <img [src]="item.profile" alt="profile" class="pc-avatar">
+                                <div class="pc-user-text">
+                                    <span class="pc-username">{{ item.name }}</span>
+                                    <span class="pc-date">{{ item.date | date:'yyyy-MM-dd' }}</span>
+                                </div>
+                            </div>
+                            <div class="pc-header-right">
+                                <div class="pc-options-wrapper">
+                                    <button class="pc-options-btn" (click)="toggleMenu(item.id, $event)">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" *ngIf="activeMenuId === item.id">
+                                        <button class="dropdown-item" (click)="openReview(item.pid)">
+                                            <i class="fas fa-eye"></i> เปิดการมองเห็นโพสต์
+                                        </button>
+                                        <button class="dropdown-item text-red" (click)="deleteThisReview(item.pid)">
+                                            <i class="fas fa-trash-alt"></i> ลบโพสต์
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pc-body">
+                            {{ item.descriptions }}
+                        </div>
+                    </div>
+
+                    <div class="empty-state" *ngIf="!reviewsList || reviewsList.length === 0">
+                        <i class="fas fa-eye-slash"></i>
+                        <p>ยังไม่มีโพสต์รีวิวที่ถูกปิดการมองเห็น</p>
+                    </div>
+
+                </ng-container>
+
+                <ng-container *ngIf="currentTab === 'qa'">
+                    
+                    <div class="post-card" *ngFor="let item of questionsList">
+                        <div class="pc-header">
+                            <div class="pc-user-info">
+                                <img [src]="item.profile" alt="profile" class="pc-avatar">
+                                <div class="pc-user-text">
+                                    <span class="pc-username">{{ item.name }}</span>
+                                    <span class="pc-date">{{ item.date | date:'yyyy-MM-dd' }}</span>
+                                </div>
+                            </div>
+                            <div class="pc-header-right">
+                                <div class="pc-options-wrapper">
+                                    <button class="pc-options-btn" (click)="toggleMenu(item.id, $event)">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" *ngIf="activeMenuId === item.id">
+                                        <button class="dropdown-item" (click)="openQuestion(item.id)">
+                                            <i class="fas fa-eye"></i> เปิดการมองเห็นโพสต์
+                                        </button>
+                                        <button class="dropdown-item text-red" (click)="deleteThisQuestion(item.id)">
+                                            <i class="fas fa-trash-alt"></i> ลบโพสต์
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pc-body">
+                            {{ item.descriptions }}
+                        </div>
+                    </div>
+
+                    <div class="empty-state" *ngIf="!questionsList || questionsList.length === 0">
+                        <i class="fas fa-eye-slash"></i>
+                        <p>ยังไม่มีโพสต์ถามตอบที่ถูกปิดการมองเห็น</p>
+                    </div>
+
+                </ng-container>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

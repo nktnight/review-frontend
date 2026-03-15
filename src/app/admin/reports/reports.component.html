@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>All Reports</title>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header>
+            <nav>
+                <button class="back-btn" onclick="history.back()">กลับ</button>
+                <div class="logo">All Reports</div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="check-border">
+
+                <div class="radio-wrapper">
+                    <input type="radio" name="sort" id="review" value="review" checked [(ngModel)]="selected"
+                        (change)="selectBy()">
+                    <label for="review" class="radio-label">โพสต์รีวิว</label>
+                </div>
+                <div class="radio-wrapper">
+                    <input type="radio" name="sort" id="question" value="question" [(ngModel)]="selected"
+                        (change)="selectBy()">
+                    <label for="question" class="radio-label">โพสต์ถามตอบ</label>
+                </div>
+                <div class="radio-wrapper">
+                    <input type="radio" name="sort" id="comment" value="comment" [(ngModel)]="selected"
+                        (change)="selectBy()">
+                    <label for="comment" class="radio-label">คอมเมนต์</label>
+                </div>
+            </div>
+
+            <div class="reports-list">
+
+                <ng-container *ngIf="selected === 'review'">
+                    <div class="reports-card" *ngFor="let report of reportsReview" [class.active]="report.isExpanded"
+                        [class.unread]="!report.isRead" [class.read]="report.isRead">
+
+                        <div class="card-header" (click)="report.isExpanded = !report.isExpanded">
+                            <div class="title-wrapper">
+
+                                <span class="report-title">
+                                    <strong>{{ report.reporter_name }}</strong> ได้รายงานโพสต์รีวิว
+                                </span>
+                            </div>
+                            <div class="meta-info">
+                                <span class="report-date">{{ report.date | date:'yyyy-MM-dd' }}</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <hr class="card-divider">
+                            <div class="card-actions">
+                                <button class="btn-action-outline"
+                                    (click)="linkToReviewDetails(report.pid)">ดูโพสต์รีวิว</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state" *ngIf="!reportsReview || reportsReview.length === 0">
+                        <i class="fas fa-inbox"></i>
+                        <p>ไม่มีการรายงานโพสต์รีวิวในขณะนี้</p>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="selected === 'question'">
+                    <div class="reports-card" *ngFor="let report of reportsQuestion" [class.active]="report.isExpanded"
+                        [class.unread]="!report.isRead" [class.read]="report.isRead">
+
+                        <div class="card-header" (click)="report.isExpanded = !report.isExpanded">
+                            <div class="title-wrapper">
+
+                                <span class="report-title">
+                                    <strong>{{ report.reporter_name }}</strong> ได้รายงานโพสต์ถามตอบ
+                                </span>
+                            </div>
+                            <div class="meta-info">
+                                <span class="report-date">{{ report.date | date:'yyyy-MM-dd' }}</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <hr class="card-divider">
+                            <div class="card-actions">
+                                <button class="btn-action-outline"
+                                    (click)="linkToQuestionDetails(report.pid)">ไปยังคำถาม</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state" *ngIf="!reportsQuestion || reportsQuestion.length === 0">
+                        <i class="fas fa-inbox"></i>
+                        <p>ไม่มีการรายงานโพสต์ถามตอบในขณะนี้</p>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="selected === 'comment'">
+                    <div class="reports-card" *ngFor="let report of reportsComment" [class.active]="report.isExpanded"
+                        [class.unread]="!report.isRead" [class.read]="report.isRead">
+
+                        <div class="card-header" (click)="report.isExpanded = !report.isExpanded">
+                            <div class="title-wrapper">
+
+                                <span class="report-title">
+                                    <strong>{{ report.reporter_name }}</strong> ได้รายงานคอมเมนต์
+                                </span>
+                            </div>
+                            <div class="meta-info">
+                                <span class="report-date">{{ report.date | date:'yyyy-MM-dd' }}</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <hr class="card-divider">
+                            <div class="card-actions">
+                                <button class="btn-action-outline"
+                                    (click)="linkToPost(report.type, report.ref_id)">ดูคอมเมนต์</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state" *ngIf="!reportsComment || reportsComment.length === 0">
+                        <i class="fas fa-inbox"></i>
+                        <p>ไม่มีการรายงานคอมเมนต์ในขณะนี้</p>
+                    </div>
+                </ng-container>
+
+
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

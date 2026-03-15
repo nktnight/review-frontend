@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header>
+            <button class="back-btn" (click)="back()">กลับ</button> <div class="divider"></div>
+            <h1 class="page-title">โปรไฟล์ของ {{ userName }}</h1>
+        </header>
+    
+        <main class="profile-container">
+            
+            <aside class="profile-sidebar">
+    
+                <div class="profile-img-box">
+                    <img [src]="userImage" alt="Profile" class="profile-img">
+                </div>
+            
+                <h2 class="username-text">{{ userName }}</h2>
+            
+               
+                 <button class="edit-btn"  *ngIf="isOwnProfile" (click)="linkToProfile()">ไปยังโปรไฟล์ของฉัน</button>
+            </aside>
+    
+            <section class="profile-content">
+                
+                <div class="tabs-header">
+                    <button class="tab-btn" 
+                            [class.active]="currentTab === 'reviews'" 
+                            (click)="tab('reviews')">
+                            โพสต์รีวิว
+                    </button>
+                    
+                    <button class="tab-btn" 
+                            [class.active]="currentTab === 'questions'" 
+                            (click)="tab('questions')">
+                            โพสต์ถามตอบ
+                    </button>
+                </div>
+    
+                <div class="tab-pane active" *ngIf="currentTab === 'reviews'">
+                    <div class="list-item" *ngFor="let item of reviews" (click)="linkToReviewDetails(item.pid)">
+                        <span class="item-code">{{ item.subcode }}</span>
+                        <span class="item-date">{{ item.date | date:'yyyy-MM-dd' }}</span>
+                    </div>
+                    
+                    <div *ngIf="reviews.length === 0" class="empty-state-message">
+                        ไม่มีประวัติการรีวิว
+                    </div>
+                </div>
+    
+                <div class="tab-pane active" *ngIf="currentTab === 'questions'">
+                    <div class="list-item" *ngFor="let item of questions" (click)="linkToQuestionDetails(item.id)">
+                        <span class="item-code">โพสต์ตั้งคำถามเมื่อ {{ item.date | date:'yyyy-MM-dd' }}</span>
+                    </div>
+    
+                     <div *ngIf="questions.length === 0" class="empty-state-message">
+                        ไม่มีประวัติการตั้งคำถาม
+                    </div>
+                </div>
+    
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

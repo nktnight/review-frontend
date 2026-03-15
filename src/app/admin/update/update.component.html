@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <title>Edit Subject</title>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header>
+            <nav>
+                <button class="back-btn" (click)="back()">กลับ</button>
+                <div class="logo">
+                    <span>Edit Subject</span>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="card">
+                <div class="create-title">แก้ไขรายวิชา</div>
+
+                <div class="input-group">
+                    <label>หมวดหมู่รายวิชา</label>
+                    <select [(ngModel)]="subjectData.category">
+                        <option value="0" disabled>กรุณาเลือกหมวดหมู่</option>
+                        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>รหัสวิชา</label>
+                    <input type="text" [(ngModel)]="subjectData.subcode" placeholder="เช่น 0041001">
+                </div>
+
+                <div class="input-group">
+                    <label>ชื่อรายวิชา</label>
+                    <input type="text" [(ngModel)]="subjectData.name" placeholder="ระบุชื่อวิชา">
+                </div>
+
+                <div class="input-group">
+                    <label>การเปิดการมองเห็น (1 คือกำลังเปิดการมองเห็น)</label>
+                    <select [(ngModel)]="subjectData.open">
+                        <option value="0" disabled>การเปิดการมองเห็น</option>
+                        <option *ngFor="let vis of visibility" [value]="vis">{{ vis }}</option>
+                    </select>
+                </div>
+
+                <div class="button-group">
+                    <button class="delete-btn" (click)="deleteSubject(subjectData.subid)">ลบวิชา</button>
+                    <button class="create-btn" (click)="onSave()">แก้ไขวิชา</button>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

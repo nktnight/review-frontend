@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>All Reports</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header>
+            <nav>
+                <button class="back-btn" onclick="history.back()">กลับ</button>
+                <div class="logo">All Messages</div>
+            </nav>
+        </header>
+
+        <main>
+            
+
+            <div class="reports-list">
+                
+                <div class="reports-card" 
+                     *ngFor="let message of messages" 
+                    [class.active]="message.isExpanded"
+                     [class.unread]="!message.is_read"
+                     [class.read]="message.is_read"
+                     (click)="message.is_read = true; updateMessageStatus(message.id)">
+                    
+                    <div class="card-header" (click)="message.isExpanded = !message.isExpanded">
+                        <div class="title-wrapper">
+                            <div class="unread-dot" *ngIf="!message.is_read"></div>
+                            
+                            <span class="report-title">
+                                {{ message.title }}
+                                <span class="message-content">{{ message.content }}</span>
+                            </span>
+                        </div>
+
+                        <div class="meta-info">
+                            <span class="report-date">{{ message.date | date:'yyyy-MM-dd' }}</span>
+                            <span class="status-badge">
+                                {{ message.is_read ? 'อ่านแล้ว' : 'ใหม่' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <hr class="card-divider">
+                        <div class="card-actions">
+                            <button class="btn-action-black" (click)="linkToPost(message.ref_type, message.ref_id)">ไปยังโพสต์</button>
+                            <button class="btn-action-red" (click)="deleteMessage(message.id)">ลบข้อความ</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-state" *ngIf="messages.length === 0">
+            <div class="empty-text">ไม่มีข้อความแจ้งเตือน</div>
+            <div class="empty-subtext">คุณยังไม่ได้รับข้อความหรือการแจ้งเตือนใดๆ ในขณะนี้</div>
+        </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>

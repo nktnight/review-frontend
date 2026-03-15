@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Sarabun:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details Edit Mode</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <header class="header">
+            <button class="back-btn" (click)="back()">กลับ</button>
+            <span class="title">User Profile</span>
+            <div style="width: 70px;"></div>
+        </header>
+
+        <hr class="divider">
+
+        <div class="profile-wrapper">
+            <div class="profile-card">
+
+                <div class="profile-image-container">
+                    <img [src]="user.profile" alt="Profile" class="profile-image" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
+
+
+
+
+                </div>
+
+                <ng-container *ngIf="!isEditing">
+                    <div class="user-role">{{ user.role }}</div>
+                    <h2 class="user-name">{{ user.name }}</h2>
+                    <div class="user-email">
+                        <i class="fas fa-envelope"></i> {{ user.email }}
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="isEditing">
+                    <select [(ngModel)]="tempUser.role" class="edit-input" style="width: auto; padding: 5px 20px;">
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </select>
+
+                    <input type="text" [(ngModel)]="tempUser.name" class="edit-input" placeholder="ชื่อ-นามสกุล"
+                        readonly>
+
+                    <input type="email" [(ngModel)]="tempUser.email" class="edit-input" placeholder="อีเมล" readonly>
+                </ng-container>
+
+
+                <div class="action-buttons">
+
+                    <button class="btn btn-edit" *ngIf="!isEditing" (click)="toggleEdit()">
+                        <i class="fas fa-pen"></i> แก้ไขข้อมูล
+                    </button>
+
+                    <button class="btn btn-cancel" *ngIf="isEditing" (click)="cancelEdit()">
+                        ยกเลิก
+                    </button>
+                    <button class="btn btn-save" *ngIf="isEditing" (click)="saveEdit()">
+                        <i class="fas fa-save"></i> บันทึก
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

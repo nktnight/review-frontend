@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Sarabun:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header>
+            <nav>
+                <button class="back-btn" onclick="history.back()">กลับ</button>
+            </nav>
+        </header>
+        <main>
+            <div class="content" *ngFor="let data of reviews">
+                <div class="post-header">
+                    <h1 class="title">โพสต์ของ {{data.name}}</h1>
+                    <button class="report-btn" *ngIf="!isOwner && !isAdmin"
+                        (click)="reportReview(data.pid)">รายงาน</button>
+                    <button class="edit-btn" *ngIf="isOwner" (click)="edtitReview()">แก้ไขรีวิว</button>
+                    <button class="report-btn" *ngIf="isAdmin && !isOwner"
+                        (click)="adminDeleteThisReview(data.pid)">ลบโพสต์นี้</button>
+                </div>
+                <div class="author-section">
+                    <div class="avatar-box">
+                        <img class="avatar-img" [src]="data.profile" alt="Profile Picture">
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name" *ngIf="isAnonymous">{{data.name}}</div>
+                        <div class="author-name pointer" *ngIf="!isAnonymous" (click)="linkToProfile(data.uid)">
+                            {{data.name}}</div>
+
+                        <div class="post-date">{{ data.date | date:'yyyy-MM-dd' }}</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p class="content-text">{{data.descriptions}}</p>
+                </div>
+                <div class="comment-input-section">
+                    <div class="input-wrapper">
+                        <input type="text" [(ngModel)]="commentText" placeholder="พิมพ์ความคิดเห็นของคุณที่นี่">
+                        <button class="send-btn" (click)="createComment()">ส่ง</button>
+                    </div>
+                </div>
+                <div class="comments-list">
+                    <div class="no-comments-state" *ngIf="!comments || comments.length === 0">
+                        <h3>ยังไม่มีความคิดเห็น</h3>
+                        <p>เป็นคนแรกที่แสดงความคิดเห็นในโพสต์นี้เลย!</p>
+                    </div>
+                    <div class="comment-wrapper" *ngFor="let comment of comments">
+
+                        <div class="comment-card">
+                            <div class="card-main-row">
+                                <div class="avatar-section">
+                                    <div class="comment-avatar">
+                                        <img [src]="comment.avatarUrl" alt="" class="avatar-image">
+                                    </div>
+                                </div>
+
+                                <div class="content-section">
+                                    <div class="inline-message-box">
+                                        <span *ngIf="comment.isAnonymous" class="username anonymous">
+                                            {{ comment.username }}
+                                        </span>
+                                        <span *ngIf="!comment.isAnonymous" (click)="linkToProfile(comment.uid)"
+                                            class="username clickable">
+                                            {{ comment.username }}
+                                        </span>
+                                        <span class="message-text">{{ comment.content }}</span>
+                                    </div>
+
+                                    <div class="reply-action-row">
+                                        <span class="action-link" (click)="openPopup(comment.id)">ตอบกลับ</span>
+                                    </div>
+                                </div>
+
+                                <div class="status-section" style="position: relative;"> <button class="btn-more"
+                                        (click)="toggleMenu(comment, $event)">&#8942;</button>
+
+                                    <div class="action-popup" *ngIf="comment.showMenu">
+
+                                        <div class="popup-item" *ngIf="comment.uid === userID || isAdmin === true">
+                                            <span class="icon-report"
+                                                (click)="deleteComment(comment.id)">ลบความคิดเห็นนี้</span>
+                                        </div>
+
+                                        <div class="popup-item" *ngIf="comment.uid !== userID && !isAdmin"
+                                            (click)="reportComment(comment.id, $event)">
+                                            <span class="icon-report">รายงาน</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="view-reply-wrapper" *ngIf="comment.replies && comment.replies.length > 0">
+                                <div class="reply-line-connector"></div> <span class="view-reply-link"
+                                    (click)="toggleReplies(comment)">
+                                    {{ comment.showReplies ? 'ซ่อนการตอบกลับ' : 'ดูการตอบกลับ (' +
+                                    comment.replies.length + ' รายการ)' }}
+                                </span>
+                            </div>
+
+                            <div class="nested-replies-container" *ngIf="comment.showReplies">
+
+                                <ng-template #replyTemplate let-replyList let-parentName="parentName" let-depth="depth">
+                                    <div class="reply-tree-node"
+                                        *ngFor="let reply of comment.showReplies ? replyList : []">
+
+                                        <div class="nested-comment-card">
+                                            <div class="nested-avatar-area">
+                                                <img [src]="reply.avatarUrl" alt="" class="avatar-image-nested">
+                                            </div>
+
+                                            <div class="nested-content-area">
+                                                <div class="inline-message-box">
+                                                    <span class="nested-user" *ngIf="reply.isAnonymous">{{
+                                                        reply.username }}</span>
+                                                    <span class="nested-user clickable" *ngIf="!reply.isAnonymous"
+                                                        (click)="linkToProfile(reply.uid)">{{ reply.username }}</span>
+                                                    <span class="reply-tag" *ngIf="parentName">
+                                                        ตอบกลับ
+                                                        <b *ngIf="comment.isAnonymous">{{ parentName }}</b>
+                                                        <b *ngIf="!comment.isAnonymous" class="clickable"
+                                                            (click)="linkToProfile(comment.uid)">{{ parentName }}</b>
+                                                    </span>
+                                                    <span class="nested-text">{{ reply.content }}</span>
+                                                </div>
+
+                                                <div class="nested-actions-bottom">
+                                                    <span class="action-reply"
+                                                        (click)="openPopup(reply.id)">ตอบกลับ</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="nested-status-area" style="position: relative;">
+
+                                                <button class="btn-menu-dots" (click)="toggleReplyMenu(reply, $event)">
+                                                    &#8942;
+                                                </button>
+
+                                                <div class="action-popup" *ngIf="reply.showMenu">
+                                                    <div class="popup-item"
+                                                        *ngIf="reply.uid === userID || isAdmin === true">
+                                                        <span class="icon-report"
+                                                            (click)="deleteComment(reply.id)">ลบความคิดเห็นนี้</span>
+                                                    </div>
+
+                                                    <div class="popup-item" *ngIf="reply.uid !== userID && !isAdmin"
+                                                        (click)="reportComment(reply.id, $event)">
+                                                        <span class="icon-report">รายงาน</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="sub-reply-zone" *ngIf="reply.replies && reply.replies.length > 0"
+                                            [style.marginLeft.px]="depth < 1 ? 44 : 0"
+                                            [style.borderLeft]="depth < 1 ? '2px solid #eee' : 'none'"
+                                            [style.paddingLeft.px]="depth < 1 ? 10 : 0"> <ng-container
+                                                *ngTemplateOutlet="replyTemplate; context:{
+        $implicit: reply.replies, 
+        parentName: reply.username,
+        depth: depth + 1
+    }"></ng-container>
+                                        </div>
+
+                                    </div>
+                                </ng-template>
+
+                                <ng-container *ngTemplateOutlet="replyTemplate; context:{
+        $implicit: comment.replies, 
+        parentName: comment.username,
+        depth: 0
+    }"></ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    <div class="popup-overlay" *ngIf="showPopup == true">
+        <div class="popup-box">
+            <h3>ตอบกลับความคิดเห็น</h3>
+            <input type="text" class="inputReply" #messageBox placeholder="พิมพ์ข้อความ..." [(ngModel)]="repliesText">
+            <div class="popup-buttons">
+                <button class="btn-cancel" (click)="showPopup = false">ยกเลิก</button>
+
+                <button class="btn-send" (click)="sendReply(); showPopup = false">ส่ง</button>
+            </div>
+        </div>
+    </div>
+
+</body>

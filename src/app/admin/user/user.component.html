@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+        <header class="header">
+            <button class="back-btn" (click)="back()">กลับ</button>
+            <h1 class="title">User Management</h1>
+        </header>
+
+        <section class="stats-container"></section>
+
+        <div class="tools-bar">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="ค้นหาชื่อผู้ใช้..." [(ngModel)]="userName"
+                    (keyup.enter)="searchUsers(userName)">
+            </div>
+        </div>
+
+        <main class="user-list">
+            <div class="list-header">
+                <div class="col-name">ชื่อผู้ใช้งาน</div>
+                <div class="col-role">สิทธิ์การใช้งาน</div>
+                <div class="col-action" style="text-align: right;">จัดการ</div>
+            </div>
+
+            <div class="user-card" *ngFor="let user of usersList">
+                <div class="user-info">
+                    <div class="avatar-circle">
+                        <img [src]="user.profile" alt="{{ user.name }}"
+                            onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
+                    </div>
+
+                    <div class="text-group">
+                        <div class="user-name">{{ user.name }}</div>
+                        <div class="user-email">{{ user.email }}</div>
+                    </div>
+                </div>
+
+                <div class="user-role">
+                    <span class="badge" [ngClass]="user.role === 'Admin' ? 'badge-admin' : 'badge-user'">
+                        {{ user.role }}
+                    </span>
+                </div>
+
+                <div class="user-actions">
+                    <button class="action-btn edit" title="แก้ไข" (click)="editUser(user.uid)">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="action-btn delete" title="ลบ" (click)="deleteUser(user.uid)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

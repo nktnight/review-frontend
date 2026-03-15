@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Review</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header>
+            <nav>
+                <button class="back-btn" onclick="history.back()">กลับ</button>
+            </nav>
+        </header>
+
+        <main>
+            <div class="content">
+                <h1 class="title">แชร์ประสบการณ์ของคุณ</h1>
+                
+                <div id="course-info-container" *ngFor="let subject of subjectData">
+                    <div class="course-code" >{{ subject.subcode }}</div>
+                    <div class="course-name" >{{ subject.name }}</div>
+                </div>
+
+                <p class="rating-label">เลือกจำนวนดาวเพื่อบอกความพอใจของคุณ</p>
+                
+                <div class="rating-group">
+                    <input type="radio" name="rating" id="rate-1" value="1" [(ngModel)]="rate">
+                    <label for="rate-1">1★</label>
+
+                    <input type="radio" name="rating" id="rate-2" value="2" [(ngModel)]="rate">
+                    <label for="rate-2">2★</label>
+
+                    <input type="radio" name="rating" id="rate-3" value="3" [(ngModel)]="rate">
+                    <label for="rate-3">3★</label>
+
+                    <input type="radio" name="rating" id="rate-4" value="4" [(ngModel)]="rate">
+                    <label for="rate-4">4★</label>
+
+                    <input type="radio" name="rating" id="rate-5" value="5" [(ngModel)]="rate">
+                    <label for="rate-5">5★</label>
+                </div>
+
+                <textarea class="review-box" placeholder="พิมพ์ข้อความรีวิวที่นี่ (จำกัด 45 ตัวอักษร)" [(ngModel)]="reviewText"></textarea>
+
+                <div class="action-bar">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" [(ngModel)]="isAnonymous"  value=1>
+                        <span>รีวิวแบบไม่ระบุตัวตน</span>
+                    </label>
+                    <button class="post-btn" (click)="cretaeReview()">โพสต์</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    
+</body>
+
+</html>

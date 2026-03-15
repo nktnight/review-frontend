@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <title>Create New Subject</title>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <header>
+            <nav>
+                <button class="back-btn" (click)="back()">กลับ</button>
+                <div class="logo">
+                    <span>Create Subject</span>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="card">
+                <div class="create-title">เพิ่มรายวิชา</div>
+
+                <div class="input-group">
+                    <label>หมวดหมู่รายวิชา</label>
+                    <select [(ngModel)]="cateID">
+                        <option value="0" disabled selected>กรุณาเลือกหมวดหมู่</option>
+                        <option *ngFor="let cate of categories" [value]="cate">{{ cate }}</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>รหัสวิชา</label>
+                    <input type="text" placeholder="เช่น 0041001" [(ngModel)]="subcode">
+                </div>
+
+                <div class="input-group">
+                    <label>ชื่อรายวิชา</label>
+                    <input type="text" placeholder="ระบุชื่อวิชา" [(ngModel)]="name">
+                </div>
+
+                <button class="create-btn" (click)="create()">เพิ่มรายวิชา</button>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

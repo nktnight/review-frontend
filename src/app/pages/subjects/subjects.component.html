@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Prompt:wght@300;400;500;700&family=Mitr:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+     
+    </style>
+</head>
+
+<body>
+    <div class="container-wrapper">
+        <header>
+            <nav>
+                <div>
+                    <button class="back-btn" (click)="back()">กลับ</button>
+                </div>
+                <div class="logo">
+                    <h1>Select Subject</h1>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div class="content">
+                <div class="check-border">
+                    <div class="radio-wrapper">
+                        <input type="radio" name="sort" id="sort-code" value="sort-code" checked [(ngModel)]="selectedOrder" (change)="sortSubjects()">
+                        <label for="sort-code" class="radio-label">รหัสวิชา</label>
+                    </div>
+                    <div class="radio-wrapper">
+                        <input type="radio" name="sort" id="sort-review" value="sort-review" [(ngModel)]="selectedOrder" (change)="sortSubjects()">
+                        <label for="sort-review" class="radio-label">จำนวนรีวิว</label>
+                    </div>
+                    <div class="radio-wrapper">
+                        <input type="radio" name="sort" id="sort-rate" value="sort-rate" [(ngModel)]="selectedOrder" (change)="sortSubjects()">
+                        <label for="sort-rate" class="radio-label">คะแนนรีวิว</label>
+                    </div>
+                </div>
+
+                <div class="main-border">
+                    <div class="subject-card" *ngFor="let item of subjects" (click)="linkToSubject(item.subid)">
+                        <div class="subject-code">
+                            <span>{{ item.subcode }}</span>
+                        </div>
+                        <div class="subject-name-rate-review">
+                            <div class="halft">
+                                <span>{{ item.name }}</span>
+                            </div>
+                            <div class="halfb">
+                                <div class="halfl">
+                                    <span>รีวิวทั้งหมด {{ item.review_count }}</span>
+                                </div>
+                                <div class="halfr">
+                                    <span>คะแนนรีวิว {{ item.avg_rate
+ }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </main>
+   
+    </div>
+</body>
+
+</html>

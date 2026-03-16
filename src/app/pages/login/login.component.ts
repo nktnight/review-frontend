@@ -47,6 +47,7 @@ ngAfterViewInit() {
   ngOnInit() {
 
   }
+  
 
   login() {
     if (!this.email.trim() || !this.password.trim()) {
@@ -108,7 +109,7 @@ ngAfterViewInit() {
             next: (response: any) => {
 
               if (!response.success) {
-                this.showError(response.error || 'เข้าสู่ระบบไม่สำเร็จ');
+                this.showError(response.message || 'เข้าสู่ระบบไม่สำเร็จ');
                 return;
               }
 
